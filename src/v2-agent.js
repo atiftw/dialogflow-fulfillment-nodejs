@@ -194,6 +194,10 @@ class V2Agent {
     });
   }
 
+  sendEmptyResponse_() {
+      this.agent.response_.json();
+  }
+
   /**
    * Send v2 response to Dialogflow fulfillment webhook request
    *

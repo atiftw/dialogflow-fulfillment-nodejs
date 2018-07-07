@@ -95,6 +95,8 @@ class WebhookClient {
      */
     this.responseMessages_ = [];
 
+    this.sendEmpty = false;
+
     /**
      * Followup event as defined by the developer
      *
@@ -157,6 +159,8 @@ class WebhookClient {
      * @type {string}
      */
     this.query = null;
+
+    this.isEmpty = false;
 
     /**
      * Original request language code or locale (i.e. "en" or "en-US")
@@ -333,6 +337,11 @@ class WebhookClient {
     return this;
   }
 
+  sendEmptyResponse() {
+    this.client.sendEmptyResponse_({});
+    return this;
+  }
+
   /**
    * Clear an existing outgoing context: https://dialogflow.com/docs/contexts
    *
@@ -446,7 +455,12 @@ class WebhookClient {
     // if there is a payload, send the payload for the repsonse
     // if platform supports messages, send messages
     const payload = this.existingPayload_(requestSource);
-    if (messages.length === 1 &&
+    if(this.isEmpty === true){
+        console.log("Sending empty response");
+        this.isEmpty = false;
+        this.client.sendEmptyResponse_();
+    }
+    else if (messages.length === 1 &&
       messages[0] instanceof Text) {
       this.client.sendTextResponse_();
     } else if (payload) {
@@ -457,6 +471,12 @@ class WebhookClient {
     } else {
       throw new Error(`No responses defined for platform: ${this.requestSource}`);
     }
+  }
+
+  sendEmpty() {
+    const requestSource = this.requestSource;
+    console.log("Sending empty response");
+    this.client.sendEmptyResponse_(requestSource);
   }
 
   /**

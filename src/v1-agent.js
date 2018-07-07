@@ -248,6 +248,11 @@ class V1Agent {
     );
   }
 
+    sendEmptyResponse_() {
+        console.log("Sending empty response");
+        this.agent.response_.json({hello: "hello"});
+    }
+
   /**
    * Get messages defined in Dialogflow's console for matched intent
    *
